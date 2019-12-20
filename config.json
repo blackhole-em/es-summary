@@ -1,0 +1,30 @@
+{
+	"LogLevel": "DEBUG",
+	"clusters": [{
+		"cluster1": {
+			"ES": {
+				"Server": "http://127.0.0.1:9200"
+			},
+			"Summarization": [{
+				"source": "docker-$source_datemask*",
+				"source_datemask": "%Y%m%d",
+				"time_ago_unit": "days",
+				"time_ago": "1",
+				"fields": {
+					"relayip": "relayip.raw",
+					"hostname": "hostname.raw",
+					"program": "program.raw",
+					"message": "message.raw",
+					"severity_label": "severity_label.raw"
+				},
+				"dest_index": "meta-docker-",
+				"dest_datemask": "%Y%m%d",
+                                "dest_es": "http://127.0.0.1:9200",
+				"dest_time": "1",
+                                "dest_time_unit": "days",
+				"dest_template_name": "meta-docker",
+				"dest_template": " { \"index_patterns\":   [\"meta-docker-*\"], \"settings\": { \"number_of_shards\": 1 , \"number_of_replicas\":0, \"index.routing.allocation.include.zone\":\"ssd\"}, \"mappings\": {\"properties\" : { \"@timestamp\" : { \"type\" : \"date\" }},\"dynamic_templates\": [ { \"strings\": { \"match_mapping_type\": \"string\", \"mapping\": { \"type\": \"text\", \"fields\": { \"raw\": { \"type\":  \"keyword\", \"ignore_above\": 8192  } } } } } ] } } "
+			}]
+		}
+	}]
+}
